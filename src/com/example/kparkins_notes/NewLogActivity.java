@@ -88,7 +88,6 @@ DatePicker.OnDateChangedListener{
 		int wordCount = countWords(body);
 		Note newNote = new Note(titleEntryET.getText().toString(), body, calendar, charCount, wordCount);
 		state.appendNotesList(newNote);
-		state.incrementNumEntries();
 		finish();
 
 	}

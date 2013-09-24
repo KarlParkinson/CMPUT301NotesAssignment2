@@ -87,7 +87,6 @@ public class NoteActivity extends Activity {
 	private void deleteAndExit() {
 	
 		state.deleteEntry(notePosition);
-		state.decrementNumEntries();
 		finish();
 		
 	}

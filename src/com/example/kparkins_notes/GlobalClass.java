@@ -1,15 +1,16 @@
 package com.example.kparkins_notes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import android.app.Application;
-import android.util.Log;
+
 
 public class GlobalClass extends Application {
 
-	private int numEntries = 0; // Number of entries in the log.
-	private int numChars = 0;
-	private int numWords = 0;
+	
 	private ArrayList<Note> notesList = new ArrayList<Note>(); // Array of log entries.
+	private HashMap<String, Integer> wordMap = new HashMap<String, Integer>();
 
 	/*
 	 * (non-Javadoc)
@@ -26,9 +27,31 @@ public class GlobalClass extends Application {
 	// Add a new entry to the list of notes.
 	public void appendNotesList(Note note) {
 		notesList.add(0, note);
-		numChars += note.getCharacterCount();
-		numWords += note.getWordCount();
+		updateWordMap(note);
 	}
+
+	private void updateWordMap(Note note) {
+		String[] words = parseWords(note.getBody());
+		Integer count;
+		for (String s : words) {
+			count = wordMap.get(s);
+			if (count == null) {
+				wordMap.put(s, 1);
+			} else {
+				wordMap.put(s, count+1);
+			}
+		}
+		
+	}
+
+	private String[] parseWords(String body) {
+		String[] s = body.split("\\s");
+		for (int i = 0; i<s.length; i++) {
+			s[i] = s[i].replaceAll("[^\\w]", "");
+		}
+		return s;
+	}
+
 
 	// Get the ith entry in the log.
 	public Note retrieveLogEntry(int i) {
@@ -36,34 +59,50 @@ public class GlobalClass extends Application {
 	}
 
 	// One entry added.
-	public void incrementNumEntries() {
-		numEntries++;
-	}
+	//public void incrementNumEntries() {
+		//numEntries++;
+	//}
 
 	// One entry deleted.
-	public void decrementNumEntries() {
-		numEntries--;
-	}
+	//public void decrementNumEntries() {
+		//numEntries--;
+	//}
 
 	// Return the number of entries.
 	public int getNumEntries() {
-		return numEntries;
+		return notesList.size();
 	}
 
 	// Replace the entry at position with the updated entry.
 	public void editEntry(int position, String Body, String Title, int chars, int words) {
+		//String oldBody = notesList.get(position).getBody();
+		//String[] diff = compareNotes(oldBody, Body);
 		notesList.get(position).setBody(Body);
 		notesList.get(position).setTitle(Title);
 		notesList.get(position).setCharacterCount(chars);
 		notesList.get(position).setWordCount(words);
+		updateWordMap(notesList.get(position));
 
 	}
 
+	private String[] compareNotes(String oldBody, String body) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public void deleteEntry(int position) {
-		Note note = notesList.get(position);
-		numChars -= note.getCharacterCount();
-		numWords -= note.getWordCount();
+		updateWordsMap2(notesList.get(position));
 		notesList.remove(position);
+	}
+
+	private void updateWordsMap2(Note note) {
+		String[] words = parseWords(note.getBody());
+		Integer count;
+		for (String s : words) {
+			count = wordMap.get(s);
+			wordMap.put(s, count-1);
+		}
+		
 	}
 
 	public ArrayList<Note> getNotes() {
@@ -71,13 +110,22 @@ public class GlobalClass extends Application {
 	}
 
 	public int getNumChars() {
-		return numChars;
+		int chars = 0;
+		for (Note n: notesList) {
+			chars += n.getCharacterCount();
+		}
+		return chars;
+			
 	}
 
 	public int getNumWords() {
-		return numWords;
+		int words = 0;
+		for (Note n: notesList) {
+			words += n.getWordCount();
+		}
+		return words;
+			
 	}
-
 
 }
 
