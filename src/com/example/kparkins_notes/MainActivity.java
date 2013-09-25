@@ -20,12 +20,13 @@ public class MainActivity extends FragmentActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		actionBar = getActionBar(); // The action bar that will have the tabs
 		initializePagers();
 		createActionBar(); // Set up the action bar.
 
 	}
-
+	
 
 
 

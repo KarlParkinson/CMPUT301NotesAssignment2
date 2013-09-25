@@ -15,5 +15,8 @@
     <string name="char_count">Character Count:</string>
     <string name="word_count">Word Count:</string>
     <string name="entries_count">Notes Entered:</string>
-    
+    <string name="word_cloud">Word Cloud</string>
+    <string name="common_words">Common Words</string>
+    <string name="title_activity_word_cloud">WordCloudActivity</string>
+
 </resources>

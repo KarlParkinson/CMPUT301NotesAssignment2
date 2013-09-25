@@ -26,14 +26,21 @@
         <activity
             android:name="com.example.kparkins_notes.NewLogActivity"
             android:label="@string/title_activity_new_log" >
-             <meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.kparkins_notes.MainActivity" />
         </activity>
         <activity
             android:name="com.example.kparkins_notes.NoteActivity"
             android:label="@string/title_activity_note" >
-        <meta-data
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kparkins_notes.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.kparkins_notes.WordCloudActivity"
+            android:label="@string/title_activity_word_cloud" >
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.kparkins_notes.MainActivity" />
         </activity>

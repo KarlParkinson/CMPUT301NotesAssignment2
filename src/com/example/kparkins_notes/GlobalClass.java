@@ -1,6 +1,7 @@
 package com.example.kparkins_notes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Application;
@@ -26,8 +27,8 @@ public class GlobalClass extends Application {
 
 	// Add a new entry to the list of notes.
 	public void appendNotesList(Note note) {
-		notesList.add(0, note);
-		updateWordMap(note);
+		notesList.add(note);
+		sortNotes();
 	}
 
 	private void updateWordMap(Note note) {
@@ -75,13 +76,11 @@ public class GlobalClass extends Application {
 
 	// Replace the entry at position with the updated entry.
 	public void editEntry(int position, String Body, String Title, int chars, int words) {
-		//String oldBody = notesList.get(position).getBody();
-		//String[] diff = compareNotes(oldBody, Body);
 		notesList.get(position).setBody(Body);
 		notesList.get(position).setTitle(Title);
 		notesList.get(position).setCharacterCount(chars);
 		notesList.get(position).setWordCount(words);
-		updateWordMap(notesList.get(position));
+		sortNotes();
 
 	}
 
@@ -91,7 +90,6 @@ public class GlobalClass extends Application {
 	}
 
 	public void deleteEntry(int position) {
-		updateWordsMap2(notesList.get(position));
 		notesList.remove(position);
 	}
 
@@ -125,6 +123,21 @@ public class GlobalClass extends Application {
 		}
 		return words;
 			
+	}
+	
+	private void sortNotes() {
+		Collections.sort(notesList, new NoteComparator());
+		Collections.reverse(notesList);
+	}
+	
+	public String aggregateNotes() {
+		String s = "";
+		for (Note n : notesList) {
+			s += n.getBody();
+			s += " ";
+		}
+		
+		return s;
 	}
 
 }

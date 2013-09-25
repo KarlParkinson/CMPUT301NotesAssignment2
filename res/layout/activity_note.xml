@@ -22,8 +22,14 @@
 
     <TextView
         android:id="@+id/charCountTextView2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <DatePicker
+        android:id="@+id/editDatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="50dp" />
 
 </LinearLayout>

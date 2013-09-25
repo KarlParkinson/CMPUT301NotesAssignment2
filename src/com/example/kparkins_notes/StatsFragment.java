@@ -1,8 +1,12 @@
 package com.example.kparkins_notes;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -49,11 +53,39 @@ public class StatsFragment extends Fragment {
 		numEntriesTextView.setText(String.valueOf(state.getNotes().size()));
 		
 	}
+	
+	private void launchWordCloudActivity() {
+		
+		Intent intent = new Intent(getActivity(), WordCloudActivity.class);
+		String cloud = state.aggregateNotes();
+		intent.putExtra("text", cloud);
+		startActivity(intent);
+		
+	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		//Inflate the layout for this fragment
 		return inflater.inflate(R.layout.stats, container, false);
 	}
+	
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		//Inflate the menu; this adds items to the action bar if it is present.
+		inflater.inflate(R.menu.stats_menu, menu);
+
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case (R.id.word_cloud):
+			launchWordCloudActivity();
+		return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+
+	}
+
+
 
 }

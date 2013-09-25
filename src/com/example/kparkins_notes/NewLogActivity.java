@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
@@ -26,9 +27,6 @@ DatePicker.OnDateChangedListener{
 	private DatePicker datePicker;
 
 	private Calendar calendar;
-	private int year;
-	private int month;
-	private int day;
 	
 	private int charCount;
 
@@ -41,6 +39,11 @@ DatePicker.OnDateChangedListener{
 		// Show the Up button in the action bar.
 		setupActionBar();
 
+	}
+	
+	protected void onResume() {
+		super.onResume();
+		
 		noteEntryET = (EditText) findViewById(R.id.enterNoteET);
 		titleEntryET = (EditText) findViewById(R.id.enterTitleET);
 		charCountTextView = (TextView) findViewById(R.id.charCountTextView);
@@ -85,6 +88,7 @@ DatePicker.OnDateChangedListener{
 	private void saveAndExit() {
 		final GlobalClass state = (GlobalClass) getApplicationContext();
 		String body = noteEntryET.getText().toString();
+		onDateChanged(datePicker, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 		int wordCount = countWords(body);
 		Note newNote = new Note(titleEntryET.getText().toString(), body, calendar, charCount, wordCount);
 		state.appendNotesList(newNote);
@@ -139,11 +143,9 @@ DatePicker.OnDateChangedListener{
 	public void onDateChanged(DatePicker view, int chosenYear, int monthOfYear,
 			int dayOfMonth) {
 
-		year = chosenYear;
-		month = monthOfYear;
-		day = dayOfMonth;
 
-		calendar.set(year, month, day);
+		calendar.set(chosenYear, monthOfYear, dayOfMonth);
+		
 
 	}
 

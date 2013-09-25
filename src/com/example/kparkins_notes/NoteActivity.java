@@ -1,20 +1,27 @@
 package com.example.kparkins_notes;
 
+import java.util.Calendar;
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-public class NoteActivity extends Activity {
+public class NoteActivity extends Activity implements 
+DatePicker.OnDateChangedListener{
 
 	private EditText titleEntryET;
 	private EditText logEntryET;
 	private TextView charCountTextView;
+	
+	private DatePicker datePicker;
 	
 	private int charCount;
 	private int wordCount;
@@ -32,6 +39,29 @@ public class NoteActivity extends Activity {
 		
 		state = (GlobalClass) getApplicationContext();
 		notePosition = getIntent().getIntExtra("Position", 0);
+		note = state.retrieveLogEntry(notePosition);
+		
+		logEntryET = (EditText) findViewById(R.id.EditLogEntryET);
+		titleEntryET = (EditText) findViewById(R.id.editTitleET);
+		charCountTextView = (TextView) findViewById(R.id.charCountTextView2);
+		setUpTextWatcher();
+		
+		datePicker = (DatePicker) findViewById(R.id.editDatePicker);
+		datePicker.setCalendarViewShown(false);
+		datePicker.updateDate(note.getDate().get(Calendar.YEAR), note.getDate().get(Calendar.MONTH), note.getDate().get(Calendar.DAY_OF_MONTH));
+		
+		titleEntryET.setText(note.getTitle());
+		logEntryET.setText(note.getBody());
+		
+
+
+	}
+	/*
+	protected void onResume() {
+		super.onResume();
+		
+		state = (GlobalClass) getApplicationContext();
+		notePosition = getIntent().getIntExtra("Position", 0);
 		
 		logEntryET = (EditText) findViewById(R.id.EditLogEntryET);
 		titleEntryET = (EditText) findViewById(R.id.editTitleET);
@@ -41,10 +71,7 @@ public class NoteActivity extends Activity {
 		
 		titleEntryET.setText(note.getTitle());
 		logEntryET.setText(note.getBody());
-
-
-
-	}
+	}*/
 
 	private void setUpTextWatcher() {
 		
@@ -79,6 +106,7 @@ public class NoteActivity extends Activity {
 		
 		String body = logEntryET.getText().toString();
 		wordCount = countWords(body);
+		onDateChanged(datePicker, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 		state.editEntry(notePosition, body, titleEntryET.getText().toString(), charCount, wordCount);
 		finish();
 		
@@ -138,6 +166,13 @@ public class NoteActivity extends Activity {
 		return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	public void onDateChanged(DatePicker view, int year, int monthOfYear,
+			int dayOfMonth) {
+		
+		note.getDate().set(year, monthOfYear, dayOfMonth);
+		
 	}
 
 
