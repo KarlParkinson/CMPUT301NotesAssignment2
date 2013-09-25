@@ -62,6 +62,13 @@ public class StatsFragment extends Fragment {
 		startActivity(intent);
 		
 	}
+	
+	private void launchCommonWordsActivity() {
+		
+		Intent intent = new Intent(getActivity(), CommonWordsActivity.class);
+		startActivity(intent);
+	}
+
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -79,6 +86,9 @@ public class StatsFragment extends Fragment {
 		switch (item.getItemId()) {
 		case (R.id.word_cloud):
 			launchWordCloudActivity();
+		return true;
+		case (R.id.common_words):
+			launchCommonWordsActivity();
 		return true;
 		default:
 			return super.onOptionsItemSelected(item);

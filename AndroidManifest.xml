@@ -44,6 +44,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.kparkins_notes.MainActivity" />
         </activity>
+        <activity
+            android:name="com.example.kparkins_notes.CommonWordsActivity"
+            android:label="@string/title_activity_common_words" >
+        </activity>
     </application>
 
 </manifest>

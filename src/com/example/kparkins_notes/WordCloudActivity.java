@@ -7,20 +7,26 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.app.NavUtils;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 public class WordCloudActivity extends Activity {
 	
 	private Cloud cloud;
 	String text;
+	//private WebView webView;
 	private TextView cloudTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_word_cloud);
+		//webView = new WebView(this);
+		//setContentView(webView);
 		setupActionBar();
 	}
 	
@@ -42,7 +48,16 @@ public class WordCloudActivity extends Activity {
 	}
 
 	private void displayCloud() {
-	
+		
+		//Spanned html = Html.fromHtml(new HTMLFormatter().html(cloud));
+		//String s = Html.toHtml(html);
+		
+		//String html = "<a href=\"http://www.flickr.com/photos/tags/art/\" style=\"font-size: 25px;\">art</a>" + "\n" +
+				//"<a href=\"http://www.flickr.com/photos/tags/australia/\" style=\"font-size: 19px;\">australia</a>";
+
+		//<a href="http://www.flickr.com/photos/tags/australia/" style="font-size: 19px;">australia</a>
+
+		//webView.loadData(s, "text/html", null);
 		cloudTextView.setText(Html.fromHtml(new HTMLFormatter().html(cloud)));
 		
 	}

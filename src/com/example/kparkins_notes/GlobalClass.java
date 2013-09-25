@@ -2,9 +2,13 @@ package com.example.kparkins_notes;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import android.app.Application;
+import android.util.Log;
 
 
 public class GlobalClass extends Application {
@@ -138,6 +142,73 @@ public class GlobalClass extends Application {
 		}
 		
 		return s;
+	}
+	
+	public TreeMap<String, Integer> getWordsMap() {
+		String words = aggregateNotes();
+		String[] wordsArray = words.split("\\s");
+		Integer count;
+		
+		for (int i = 0; i < wordsArray.length; i++) {
+			wordsArray[i] = wordsArray[i].replaceAll("[^\\w]", "");
+			count = wordMap.get(wordsArray[i]);
+			if (count == null) {
+				wordMap.put(wordsArray[i], 1);
+			} else {
+				wordMap.put(wordsArray[i], count+1);
+			}
+		}
+		
+		TreeMap<String, Integer> sortedMap = sortWordMap();
+		Log.d("size of map: ", String.valueOf(wordMap.size()));
+		return sortedMap;
+		
+	}
+	
+	public HashMap<String, Integer> getWordsMap2() {
+		String words = aggregateNotes();
+		String[] wordsArray = words.split("\\s");
+		Integer count;
+		
+		for (int i = 0; i < wordsArray.length; i++) {
+			wordsArray[i] = wordsArray[i].replaceAll("[^\\w]", "");
+			count = wordMap.get(wordsArray[i]);
+			if (count == null) {
+				wordMap.put(wordsArray[i], 1);
+			} else {
+				wordMap.put(wordsArray[i], count+1);
+			}
+		}
+		
+		Log.d("size of map: ", String.valueOf(wordMap.size()));
+		return wordMap;
+		
+	}
+
+	private TreeMap<String, Integer> sortWordMap() {
+		
+		ValueComparator bvc = new ValueComparator(wordMap);
+		TreeMap<String, Integer> sortedMap = new TreeMap<String, Integer>(bvc);
+		return sortedMap;
+		
+	}
+	
+	//http://stackoverflow.com/questions/109383/how-to-sort-a-mapkey-value-on-the-values-in-java?lq=1
+	class ValueComparator implements Comparator<String> {
+
+	    Map<String, Integer> base;
+	    public ValueComparator(Map<String, Integer> base) {
+	        this.base = base;
+	    }
+
+	    // Note: this comparator imposes orderings that are inconsistent with equals.    
+	    public int compare(String a, String b) {
+	        if (base.get(a) >= base.get(b)) {
+	            return -1;
+	        } else {
+	            return 1;
+	        } // returning 0 would merge keys
+	    }
 	}
 
 }
