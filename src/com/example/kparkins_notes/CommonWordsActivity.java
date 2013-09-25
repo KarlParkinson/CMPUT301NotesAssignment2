@@ -2,10 +2,11 @@ package com.example.kparkins_notes;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -19,42 +20,45 @@ import android.widget.ArrayAdapter;
  */
 public class CommonWordsActivity extends ListActivity {
 	
-	private TreeMap<String, Integer> map;
-	private HashMap<String, Integer> map2;
+	//private TreeMap<String, Integer> map;
+	private HashMap<String, Integer> wordMap;
 	private GlobalClass state;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		state = (GlobalClass) getApplicationContext();
+		wordMap = state.getSortedWordsMap();
+		Log.d("WordsActivity: ", "New words activity");
+		createListView();
 	}
 	
 	protected void onResume() {
 		super.onResume();
-		state = (GlobalClass) getApplicationContext();
-		map2 = state.getWordsMap2();
-		createListView();
+	
 	}
 
 	private void createListView() {
-		int mapSize = map2.size();
+		int mapSize = wordMap.size();
 		ArrayList<String> commonWords;
+		Log.d("Word map: ", wordMap.toString());
 		if (mapSize>100) {
-			 commonWords = getCommonWordsMax();
+			 commonWords = getCommonWordsMax(wordMap);
 		} else {
-			commonWords = getCommonWords();
+			commonWords = getCommonWords(wordMap);
 		}
 		
+		Log.d("Size of common words list: ", String.valueOf(commonWords.size()));
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commonWords);
-		//Log.d("First entry: ", commonWords.get(0));
 		setListAdapter(adapter);
 		
 	}
 
-	private ArrayList<String> getCommonWords() {
+	private ArrayList<String> getCommonWords(Map<String, Integer> wordMap2) {
 		ArrayList<String> mcw = new ArrayList<String>();
-		Iterator entries = map2.entrySet().iterator();
+		Iterator<?> entries = wordMap2.entrySet().iterator();
 		while (entries.hasNext()) {
-			Entry entry = (Entry) entries.next();
+			Entry<?, ?> entry = (Entry<?, ?>) entries.next();
 			String key = (String) entry.getKey();
 			mcw.add(key);
 		}
@@ -63,12 +67,12 @@ public class CommonWordsActivity extends ListActivity {
 		return mcw;
 	}
 
-	private ArrayList<String> getCommonWordsMax() {
+	private ArrayList<String> getCommonWordsMax(Map<String, Integer> wordMap2) {
 		int max = 100;
 		ArrayList<String> mcw = new ArrayList<String>();
-		Iterator entries = map2.entrySet().iterator();
+		Iterator<?> entries = wordMap.entrySet().iterator();
 		while(max > 0) {
-			Entry entry = (Entry) entries.next();
+			Entry<?, ?> entry = (Entry<?, ?>) entries.next();
 			String key = (String) entry.getKey();
 			mcw.add(key);
 			max--;
@@ -84,5 +88,7 @@ public class CommonWordsActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.common_words, menu);
 		return true;
 	}
+	
+	
 
 }

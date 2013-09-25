@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -35,43 +39,12 @@ public class GlobalClass extends Application {
 		sortNotes();
 	}
 
-	private void updateWordMap(Note note) {
-		String[] words = parseWords(note.getBody());
-		Integer count;
-		for (String s : words) {
-			count = wordMap.get(s);
-			if (count == null) {
-				wordMap.put(s, 1);
-			} else {
-				wordMap.put(s, count+1);
-			}
-		}
-		
-	}
-
-	private String[] parseWords(String body) {
-		String[] s = body.split("\\s");
-		for (int i = 0; i<s.length; i++) {
-			s[i] = s[i].replaceAll("[^\\w]", "");
-		}
-		return s;
-	}
-
 
 	// Get the ith entry in the log.
 	public Note retrieveLogEntry(int i) {
 		return notesList.get(i);
 	}
 
-	// One entry added.
-	//public void incrementNumEntries() {
-		//numEntries++;
-	//}
-
-	// One entry deleted.
-	//public void decrementNumEntries() {
-		//numEntries--;
-	//}
 
 	// Return the number of entries.
 	public int getNumEntries() {
@@ -88,24 +61,14 @@ public class GlobalClass extends Application {
 
 	}
 
-	private String[] compareNotes(String oldBody, String body) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public void deleteEntry(int position) {
 		notesList.remove(position);
+		wordMap.clear();
+		wordMap = getWordsMap();
+		Log.d("numNotes: ", String.valueOf(notesList.size()));
 	}
 
-	private void updateWordsMap2(Note note) {
-		String[] words = parseWords(note.getBody());
-		Integer count;
-		for (String s : words) {
-			count = wordMap.get(s);
-			wordMap.put(s, count-1);
-		}
-		
-	}
 
 	public ArrayList<Note> getNotes() {
 		return notesList;
@@ -144,7 +107,7 @@ public class GlobalClass extends Application {
 		return s;
 	}
 	
-	public TreeMap<String, Integer> getWordsMap() {
+	public HashMap<String, Integer> getWordsMap() {
 		String words = aggregateNotes();
 		String[] wordsArray = words.split("\\s");
 		Integer count;
@@ -159,57 +122,50 @@ public class GlobalClass extends Application {
 			}
 		}
 		
-		TreeMap<String, Integer> sortedMap = sortWordMap();
-		Log.d("size of map: ", String.valueOf(wordMap.size()));
-		return sortedMap;
-		
-	}
-	
-	public HashMap<String, Integer> getWordsMap2() {
-		String words = aggregateNotes();
-		String[] wordsArray = words.split("\\s");
-		Integer count;
-		
-		for (int i = 0; i < wordsArray.length; i++) {
-			wordsArray[i] = wordsArray[i].replaceAll("[^\\w]", "");
-			count = wordMap.get(wordsArray[i]);
-			if (count == null) {
-				wordMap.put(wordsArray[i], 1);
-			} else {
-				wordMap.put(wordsArray[i], count+1);
-			}
-		}
-		
-		Log.d("size of map: ", String.valueOf(wordMap.size()));
 		return wordMap;
 		
 	}
-
-	private TreeMap<String, Integer> sortWordMap() {
+	
+	
+	public HashMap<String, Integer> getSortedWordsMap() {
+		String words = aggregateNotes();
+		String[] wordsArray = words.split("\\s");
+		Integer count;
 		
-		ValueComparator bvc = new ValueComparator(wordMap);
-		TreeMap<String, Integer> sortedMap = new TreeMap<String, Integer>(bvc);
-		return sortedMap;
+		for (int i = 0; i < wordsArray.length; i++) {
+			wordsArray[i] = wordsArray[i].replaceAll("[^\\w]", "");
+			count = wordMap.get(wordsArray[i]);
+			if (count == null) {
+				wordMap.put(wordsArray[i], 1);
+			} else {
+				wordMap.put(wordsArray[i], count+1);
+			}
+		}
+		
+		Map<String, Integer> sortedMap = sortByValue(wordMap);
+		return (HashMap<String, Integer>) sortedMap;
 		
 	}
+
 	
 	//http://stackoverflow.com/questions/109383/how-to-sort-a-mapkey-value-on-the-values-in-java?lq=1
-	class ValueComparator implements Comparator<String> {
+	Map<String, Integer> sortByValue(Map<String, Integer> map) {
+		List list = new LinkedList(map.entrySet());
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o1)).getValue())
+						.compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
 
-	    Map<String, Integer> base;
-	    public ValueComparator(Map<String, Integer> base) {
-	        this.base = base;
-	    }
+		Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+		for (Iterator<?> it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry)it.next();
+			result.put((String) entry.getKey(), (Integer) entry.getValue());
+		}
+		return result;
+	} 
 
-	    // Note: this comparator imposes orderings that are inconsistent with equals.    
-	    public int compare(String a, String b) {
-	        if (base.get(a) >= base.get(b)) {
-	            return -1;
-	        } else {
-	            return 1;
-	        } // returning 0 would merge keys
-	    }
-	}
 
 }
 

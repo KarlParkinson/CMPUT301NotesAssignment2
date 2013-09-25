@@ -1,6 +1,11 @@
 package com.example.kparkins_notes;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import org.mcavallo.opencloud.Cloud;
+import org.mcavallo.opencloud.Tag;
 import org.mcavallo.opencloud.formatters.HTMLFormatter;
 
 import android.os.Bundle;
@@ -9,6 +14,7 @@ import android.support.v4.app.NavUtils;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -17,16 +23,17 @@ import android.widget.TextView;
 public class WordCloudActivity extends Activity {
 	
 	private Cloud cloud;
-	String text;
-	//private WebView webView;
-	private TextView cloudTextView;
+	private WebView webView;
+	//private TextView cloudTextView;
+	private GlobalClass state;
+	private HashMap<String, Integer> wordMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_word_cloud);
-		//webView = new WebView(this);
-		//setContentView(webView);
+		//setContentView(R.layout.activity_word_cloud);
+		webView = new WebView(this);
+		setContentView(webView);
 		setupActionBar();
 	}
 	
@@ -37,28 +44,34 @@ public class WordCloudActivity extends Activity {
 	
 	protected void onResume() {
 		super.onResume();
+		state = (GlobalClass) getApplicationContext();
+		wordMap = state.getWordsMap();
 		cloud = new Cloud();
-		text = getIntent().getStringExtra("text");
-		cloud.setMaxTagsToDisplay(text.length());
+		cloud.setMaxWeight(38.0);
+		cloud.setMaxTagsToDisplay(wordMap.size());
 		cloud.setDefaultLink("www.google.ca");
 		cloud.setTagCase(Cloud.Case.UPPER);
-		cloud.addText(text);
-		cloudTextView = (TextView) findViewById(R.id.cloudTextView);
+		Iterator<?> entries = wordMap.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<?, ?> entry = (Entry<?, ?>) entries.next();
+			String key = (String) entry.getKey();
+			Integer value = (Integer) entry.getValue();
+			cloud.addTag(new Tag(key, (double) value));
+		}
+		//cloudTextView = (TextView) findViewById(R.id.cloudTextView);
 		displayCloud();
 	}
 
 	private void displayCloud() {
 		
-		//Spanned html = Html.fromHtml(new HTMLFormatter().html(cloud));
-		//String s = Html.toHtml(html);
-		
-		//String html = "<a href=\"http://www.flickr.com/photos/tags/art/\" style=\"font-size: 25px;\">art</a>" + "\n" +
-				//"<a href=\"http://www.flickr.com/photos/tags/australia/\" style=\"font-size: 19px;\">australia</a>";
-
-		//<a href="http://www.flickr.com/photos/tags/australia/" style="font-size: 19px;">australia</a>
-
-		//webView.loadData(s, "text/html", null);
-		cloudTextView.setText(Html.fromHtml(new HTMLFormatter().html(cloud)));
+		String html = "<html><body>";
+		for (Tag t : cloud.tags()) {
+			html += "<a href=\"" + t.getLink() + " style=\"font-size: " + t.getWeight() + "px;\">" +t.getName() + "</a>" + " ";
+			Log.d("HTML: ", html);
+		}
+		html += "</html></body>";
+		webView.loadData(html, "text/html", null);
+		//cloudTextView.setText(Html.fromHtml(html));
 		
 	}
 
