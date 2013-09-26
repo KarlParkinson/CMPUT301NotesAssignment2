@@ -12,14 +12,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+/**
+ * @author  kparkins
+ */
 public class StatsFragment extends Fragment {
 	
 	private TextView numCharsTextView;
 	private TextView numWordsTextView;
 	private TextView numEntriesTextView;
 	
-	private int charCount;
-	private int wordCount;
 	
 	private GlobalClass state;
 
@@ -95,6 +96,7 @@ public class StatsFragment extends Fragment {
 		}
 
 	}
+
 
 
 

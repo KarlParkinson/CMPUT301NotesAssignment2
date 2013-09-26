@@ -15,8 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+/**
+ * @author  kparkins
+ */
 public class NotesFragment extends ListFragment {
 
+	
 	private MyAdapter adapter;
 	private GlobalClass state;
 	private ArrayList<Note> notes;
@@ -76,8 +80,6 @@ public class NotesFragment extends ListFragment {
 		intent.putExtra("Position", position);
 		startActivity(intent);
 	}
-
-
 
 
 

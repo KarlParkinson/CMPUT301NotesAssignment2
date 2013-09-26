@@ -18,10 +18,14 @@ import android.widget.ArrayAdapter;
 /*
  * Need to sort the hash map that gets returned by state.
  */
+/**
+ * @author  kparkins
+ */
 public class CommonWordsActivity extends ListActivity {
 	
 	//private TreeMap<String, Integer> map;
 	private HashMap<String, Integer> wordMap;
+
 	private GlobalClass state;
 
 	@Override
@@ -48,7 +52,6 @@ public class CommonWordsActivity extends ListActivity {
 			commonWords = getCommonWords(wordMap);
 		}
 		
-		Log.d("Size of common words list: ", String.valueOf(commonWords.size()));
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commonWords);
 		setListAdapter(adapter);
 		

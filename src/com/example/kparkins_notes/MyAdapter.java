@@ -78,8 +78,5 @@ public class MyAdapter extends BaseAdapter {
 		return row;
 	}
 	
-	public void printToLog() {
-		Log.d("Size of notes list:", String.valueOf(notes.size()));
-	}
 
 }

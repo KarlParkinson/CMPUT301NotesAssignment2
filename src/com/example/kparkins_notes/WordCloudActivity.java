@@ -20,11 +20,13 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+/**
+ * @author  kparkins
+ */
 public class WordCloudActivity extends Activity {
 	
 	private Cloud cloud;
 	private WebView webView;
-	//private TextView cloudTextView;
 	private GlobalClass state;
 	private HashMap<String, Integer> wordMap;
 
@@ -49,7 +51,7 @@ public class WordCloudActivity extends Activity {
 		cloud = new Cloud();
 		cloud.setMaxWeight(38.0);
 		cloud.setMaxTagsToDisplay(wordMap.size());
-		cloud.setDefaultLink("www.google.ca");
+		//cloud.setDefaultLink("www.google.ca");
 		cloud.setTagCase(Cloud.Case.UPPER);
 		Iterator<?> entries = wordMap.entrySet().iterator();
 		while (entries.hasNext()) {

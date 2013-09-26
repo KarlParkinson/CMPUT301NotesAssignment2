@@ -14,6 +14,9 @@ import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+/**
+ * @author  kparkins
+ */
 public class NoteActivity extends Activity implements 
 DatePicker.OnDateChangedListener{
 
@@ -27,6 +30,7 @@ DatePicker.OnDateChangedListener{
 	private int wordCount;
 	private int notePosition;
 	
+
 	private GlobalClass state;
 	private Note note;
 
@@ -56,23 +60,6 @@ DatePicker.OnDateChangedListener{
 
 
 	}
-	/*
-	protected void onResume() {
-		super.onResume();
-		
-		state = (GlobalClass) getApplicationContext();
-		notePosition = getIntent().getIntExtra("Position", 0);
-		
-		logEntryET = (EditText) findViewById(R.id.EditLogEntryET);
-		titleEntryET = (EditText) findViewById(R.id.editTitleET);
-		charCountTextView = (TextView) findViewById(R.id.charCountTextView2);
-		setUpTextWatcher();
-		note = state.retrieveLogEntry(notePosition);
-		
-		titleEntryET.setText(note.getTitle());
-		logEntryET.setText(note.getBody());
-	}*/
-
 	private void setUpTextWatcher() {
 		
 		logEntryET.addTextChangedListener(new TextWatcher() {

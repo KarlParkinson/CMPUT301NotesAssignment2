@@ -5,12 +5,17 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 
+/**
+ * @author  kparkins
+ */
 public class MainActivity extends FragmentActivity {
 	
 	private ActionBar actionBar;
 	private ViewPager myViewPager; // view pager that handles swiping between fragments
+	
 	private MyFragmentPagerAdapter swipeAdapter; // custom implementation of FragmentPagerAdapter
 
 
@@ -83,7 +88,11 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
-
+	protected void onStop() {
+		super.onStop();
+		GlobalClass state = (GlobalClass) getApplicationContext();
+		state.saveNotes();
+	}
 
 
 
@@ -93,5 +102,6 @@ public class MainActivity extends FragmentActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
 
 }

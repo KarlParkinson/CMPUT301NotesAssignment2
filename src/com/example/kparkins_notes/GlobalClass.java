@@ -1,5 +1,11 @@
 package com.example.kparkins_notes;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+
 
 import android.app.Application;
 import android.util.Log;
@@ -18,8 +24,13 @@ import android.util.Log;
 public class GlobalClass extends Application {
 
 	
-	private ArrayList<Note> notesList = new ArrayList<Note>(); // Array of log entries.
-	private HashMap<String, Integer> wordMap = new HashMap<String, Integer>();
+	//private ArrayList<Note> notesList = new ArrayList<Note>(); // Array of log entries.
+	//private HashMap<String, Integer> wordMap = new HashMap<String, Integer>();
+	
+	private ArrayList<Note> notesList;
+	private HashMap<String, Integer> wordMap;
+	
+	private static final String FILENAME = "file.sav";
 
 	/*
 	 * (non-Javadoc)
@@ -31,6 +42,33 @@ public class GlobalClass extends Application {
 
 	public void onCreate() {
 		super.onCreate();
+		notesList = readFromFile();
+		wordMap = new HashMap<String, Integer>();
+	}
+
+	// From LonelyTwitter
+	private ArrayList<Note> readFromFile() {
+		
+		ArrayList<Note> notes = new ArrayList<Note>();
+		try {
+			FileInputStream fis = openFileInput(FILENAME);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			while (true) {
+				Note n = (Note) ois.readObject();
+				notes.add(n);
+			}
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return notes;
 	}
 
 	// Add a new entry to the list of notes.
@@ -98,7 +136,7 @@ public class GlobalClass extends Application {
 	}
 	
 	public String aggregateNotes() {
-		String s = "";
+		String s = " ";
 		for (Note n : notesList) {
 			s += n.getBody();
 			s += " ";
@@ -164,7 +202,27 @@ public class GlobalClass extends Application {
 			result.put((String) entry.getKey(), (Integer) entry.getValue());
 		}
 		return result;
-	} 
+	}
+
+	// From LonelyTwitter
+	public void saveNotes() {
+		try {
+			FileOutputStream fos = openFileOutput(FILENAME,
+					0);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			for (Note n : notesList) {
+				oos.writeObject(n);
+			}
+			fos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 
 }
