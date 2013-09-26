@@ -58,7 +58,6 @@ public class WordCloudActivity extends Activity {
 			Integer value = (Integer) entry.getValue();
 			cloud.addTag(new Tag(key, (double) value));
 		}
-		//cloudTextView = (TextView) findViewById(R.id.cloudTextView);
 		displayCloud();
 	}
 
@@ -66,8 +65,7 @@ public class WordCloudActivity extends Activity {
 		
 		String html = "<html><body>";
 		for (Tag t : cloud.tags()) {
-			html += "<a href=\"" + t.getLink() + " style=\"font-size: " + t.getWeight() + "px;\">" +t.getName() + "</a>" + " ";
-			Log.d("HTML: ", html);
+			html += "<a"+ " style=\"font-size: " + t.getWeight() + "px;\">" +t.getName() + "</a>" + " ";
 		}
 		html += "</html></body>";
 		webView.loadData(html, "text/html", null);
