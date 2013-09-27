@@ -21,14 +21,32 @@ import android.app.Application;
 import android.util.Log;
 
 
+/*kparkins-notes. Stores and displays a list of notes along with some statistics.
+Copyright (C) 2013 Karl Parkinson.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+ * The GlobalClass is responsible for storing all the data for the application, as well as writing and reading to a file.
+ */
 public class GlobalClass extends Application {
 
 	
-	//private ArrayList<Note> notesList = new ArrayList<Note>(); // Array of log entries.
-	//private HashMap<String, Integer> wordMap = new HashMap<String, Integer>();
 	
-	private ArrayList<Note> notesList;
-	private HashMap<String, Integer> wordMap;
+	private ArrayList<Note> notesList; // List of notes.
+	private HashMap<String, Integer> wordMap; // Map of words to how often they appear.
 	
 	private static final String FILENAME = "file.sav";
 
@@ -36,9 +54,7 @@ public class GlobalClass extends Application {
 	 * (non-Javadoc)
 	 * @see android.app.Application#onCreate()
 	 *
-	 * Will want to eventually recreate application data from persistent storage in an SQLite DB every time this is called.
-	 * For now, just assume this class will never be destroyed by the OS (not true).
-	 */
+	*/
 
 	public void onCreate() {
 		super.onCreate();
@@ -100,18 +116,20 @@ public class GlobalClass extends Application {
 	}
 
 
+	// Delete the entry at position and reset the word map
 	public void deleteEntry(int position) {
 		notesList.remove(position);
 		wordMap.clear();
 		wordMap = getWordsMap();
-		Log.d("numNotes: ", String.valueOf(notesList.size()));
 	}
 
 
+	// Return the list of notes
 	public ArrayList<Note> getNotes() {
 		return notesList;
 	}
 
+	// Return how many characters in all notes
 	public int getNumChars() {
 		int chars = 0;
 		for (Note n: notesList) {
@@ -121,6 +139,7 @@ public class GlobalClass extends Application {
 			
 	}
 
+	// Return how many words in all notes
 	public int getNumWords() {
 		int words = 0;
 		for (Note n: notesList) {
@@ -130,11 +149,13 @@ public class GlobalClass extends Application {
 			
 	}
 	
+	// Sort notes by date.
 	private void sortNotes() {
 		Collections.sort(notesList, new NoteComparator());
 		Collections.reverse(notesList);
 	}
 	
+	// Create a string of all the note bodies
 	public String aggregateNotes() {
 		String s = " ";
 		for (Note n : notesList) {
@@ -145,6 +166,8 @@ public class GlobalClass extends Application {
 		return s;
 	}
 	
+	
+	// Create the HashMap of words to their word count.
 	public HashMap<String, Integer> getWordsMap() {
 		String words = aggregateNotes();
 		String[] wordsArray = words.split("\\s");
@@ -165,6 +188,7 @@ public class GlobalClass extends Application {
 	}
 	
 	
+	// Sort the HashMap by value.
 	public HashMap<String, Integer> getSortedWordsMap() {
 		String words = aggregateNotes();
 		String[] wordsArray = words.split("\\s");

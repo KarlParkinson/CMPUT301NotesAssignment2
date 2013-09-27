@@ -15,9 +15,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-/**
- * @author  kparkins
+/*kparkins-notes. Stores and displays a list of notes along with some statistics.
+Copyright (C) 2013 Karl Parkinson.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+ * The NotesFragment is responsible for displaying all the stored notes to the user in a ListView.
+ * When first created, the list of notes is fetched from the GlobalClass and then passed to an instance
+ * of MyAdapter. When onResume is called, it is assumed that a note has either been added, deleted, or edited, 
+ * so the adapter is notified of a change in the data. The NoteFragment also spawns a NewLogActivity when the 
+ * user requests to add a new note, and spawns a NoteActivity when the user selects to edit or delete a note.
  */
+
 public class NotesFragment extends ListFragment {
 
 	
@@ -26,10 +48,7 @@ public class NotesFragment extends ListFragment {
 	private ArrayList<Note> notes;
 
 
-	/*
-	 * Need to configure when to access global class (onCreate()? onResume()?) and pull data from it. Then need to
-	 * populate list view using this data.
-	 */
+	
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,7 +56,7 @@ public class NotesFragment extends ListFragment {
 		state = ((GlobalClass) getActivity().getApplicationContext());
 		notes = state.getNotes();
 		adapter = new MyAdapter(notes, getActivity());
-		setListAdapter(adapter);
+		setListAdapter(adapter); // Display list of notes
 	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +74,7 @@ public class NotesFragment extends ListFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case (R.id.add_new_note):
-			launchNewLogActivity();
+			launchNewLogActivity(); // User wants to create a new note
 		return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -70,7 +89,7 @@ public class NotesFragment extends ListFragment {
 
 	public void onResume() {
 		super.onResume();
-		adapter.notifyDataSetChanged();
+		adapter.notifyDataSetChanged(); // Display updated notes list
 	}
 
 

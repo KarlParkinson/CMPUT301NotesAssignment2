@@ -12,9 +12,30 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-/**
- * @author  kparkins
+/*kparkins-notes. Stores and displays a list of notes along with some statistics.
+Copyright (C) 2013 Karl Parkinson.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+ * That StatsFragment is responsible for displaying the character count, word count, and number of notes that
+ * have been saved. The character and word count only count characters and words in the bodies of notes, not the title.
+ * This information is fetched from the GlobalClass and then displayed to the user. The StatsFragment also spawns 
+ * CommonWordActivity and WordCloudActivity when prompted by the user.
  */
+
 public class StatsFragment extends Fragment {
 	
 	private TextView numCharsTextView;
@@ -49,25 +70,23 @@ public class StatsFragment extends Fragment {
 	
 	private void setText() {
 		
-		numCharsTextView.setText(String.valueOf(state.getNumChars()));
-		numWordsTextView.setText(String.valueOf(state.getNumWords()));
-		numEntriesTextView.setText(String.valueOf(state.getNotes().size()));
+		numCharsTextView.setText(String.valueOf(state.getNumChars())); // Display the character count
+		numWordsTextView.setText(String.valueOf(state.getNumWords())); // Display the word count
+		numEntriesTextView.setText(String.valueOf(state.getNotes().size())); // Display how many notes are saved.
 		
 	}
 	
 	private void launchWordCloudActivity() {
 		
 		Intent intent = new Intent(getActivity(), WordCloudActivity.class);
-		String cloud = state.aggregateNotes();
-		intent.putExtra("text", cloud);
-		startActivity(intent);
+		startActivity(intent); // start a WordCloudActivity
 		
 	}
 	
 	private void launchCommonWordsActivity() {
 		
 		Intent intent = new Intent(getActivity(), CommonWordsActivity.class);
-		startActivity(intent);
+		startActivity(intent); // Start a CommonWordsActivity
 	}
 
 
@@ -86,10 +105,10 @@ public class StatsFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case (R.id.word_cloud):
-			launchWordCloudActivity();
+			launchWordCloudActivity(); // User wants to see a word cloud
 		return true;
 		case (R.id.common_words):
-			launchCommonWordsActivity();
+			launchCommonWordsActivity(); // User wants to see a list of common words
 		return true;
 		default:
 			return super.onOptionsItemSelected(item);

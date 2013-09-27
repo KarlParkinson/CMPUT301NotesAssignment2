@@ -19,5 +19,7 @@
     <string name="common_words">Common Words</string>
     <string name="title_activity_word_cloud">WordCloudActivity</string>
     <string name="title_activity_common_words">CommonWordsActivity</string>
+    <string name="enter_note">Enter Note</string>
+    <string name="enter_title">Enter Title</string>
 
 </resources>
